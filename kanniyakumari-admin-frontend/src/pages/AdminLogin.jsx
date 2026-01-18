@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
@@ -8,27 +8,27 @@ export default function AdminLogin() {
   const login = () => {
     if (!email) return alert("Enter admin email");
     localStorage.setItem("adminEmail", email);
-    navigate("/admin");
+    navigate("/admin/problems");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black px-6">
-      <div className="w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-8">
-        <h1 className="text-2xl font-bold text-white mb-6">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="bg-white/5 p-8 rounded-xl w-full max-w-sm">
+        <h1 className="text-2xl font-bold mb-6">
           Admin Login
         </h1>
 
         <input
           type="email"
           placeholder="Admin email"
+          className="w-full p-3 rounded bg-black/40 mb-4"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white mb-4"
         />
 
         <button
           onClick={login}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 py-3 rounded-lg text-white font-semibold"
+          className="w-full bg-indigo-600 py-3 rounded font-semibold"
         >
           Login
         </button>

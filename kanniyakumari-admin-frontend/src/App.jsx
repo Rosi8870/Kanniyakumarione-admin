@@ -1,14 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import AdminProblems from "./pages/AdminProblems";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Navigate to="/admin/problems" />} />
+      <Route path="/admin/problems" element={<AdminProblems />} />
+    </Routes>
   );
 }

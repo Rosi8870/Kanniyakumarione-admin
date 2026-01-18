@@ -1,10 +1,8 @@
 export default function adminAuth(req, res, next) {
-  const email = req.headers["x-admin-email"];
+  const adminKey = req.headers["x-admin-key"];
 
-  if (!email || email !== process.env.ADMIN_EMAIL) {
-    return res.status(401).json({
-      error: "Unauthorized admin access",
-    });
+  if (!adminKey || adminKey !== process.env.ADMIN_SECRET) {
+    return res.status(401).json({ error: "Unauthorized admin access" });
   }
 
   next();
