@@ -1,6 +1,6 @@
-const API = import.meta.env.VITE_ADMIN_API;
-const ADMIN_KEY = import.meta.env.VITE_ADMIN_SECRET;
+import { API, ADMIN_KEY } from "./adminApi";
 
+/* GET ALL PROBLEMS */
 export const getAdminProblems = async () => {
   const res = await fetch(`${API}/api/admin/problems`, {
     headers: {
@@ -8,41 +8,35 @@ export const getAdminProblems = async () => {
     },
   });
 
-  if (!res.ok) {
-    throw new Error("Unauthorized");
-  }
-
+  if (!res.ok) throw new Error("Unauthorized");
   return res.json();
 };
 
+/* APPROVE */
 export const approveProblem = async (id) => {
   const res = await fetch(`${API}/api/admin/problems/${id}/approve`, {
     method: "PATCH",
-    headers: {
-      "x-admin-key": ADMIN_KEY,
-    },
+    headers: { "x-admin-key": ADMIN_KEY },
   });
 
   if (!res.ok) throw new Error("Approve failed");
 };
 
+/* REJECT */
 export const rejectProblem = async (id) => {
   const res = await fetch(`${API}/api/admin/problems/${id}/reject`, {
     method: "PATCH",
-    headers: {
-      "x-admin-key": ADMIN_KEY,
-    },
+    headers: { "x-admin-key": ADMIN_KEY },
   });
 
   if (!res.ok) throw new Error("Reject failed");
 };
 
+/* DELETE */
 export const deleteProblem = async (id) => {
   const res = await fetch(`${API}/api/admin/problems/${id}`, {
     method: "DELETE",
-    headers: {
-      "x-admin-key": ADMIN_KEY,
-    },
+    headers: { "x-admin-key": ADMIN_KEY },
   });
 
   if (!res.ok) throw new Error("Delete failed");
