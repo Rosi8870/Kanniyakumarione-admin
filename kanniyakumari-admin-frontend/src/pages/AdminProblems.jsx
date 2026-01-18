@@ -1,25 +1,20 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
   getAdminProblems,
   approveProblem,
   rejectProblem,
   deleteProblem,
-} from "../services/adminProblems.service";
-import AdminNavbar from "../components/AdminNavbar";
-import { toast } from "react-toastify";
+} from "../services/problems.admin.service";
 
 export default function AdminProblems() {
-  const [problems, setProblems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
 
   const load = async () => {
     try {
-      const data = await getAdminProblems();
-      setProblems(data);
-    } catch {
-      toast.error("Unauthorized");
-    } finally {
-      setLoading(false);
+      setItems(await getAdminProblems());
+    } catch (e) {
+      toast.error(e.message);
     }
   };
 
@@ -27,84 +22,58 @@ export default function AdminProblems() {
     load();
   }, []);
 
-  const action = async (fn, id, msg) => {
-    try {
-      await fn(id);
-      toast.success(msg);
-      load();
-    } catch {
-      toast.error("Action failed");
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-black">
-      <AdminNavbar />
+    <div className="p-4 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Reported Problems</h1>
 
-      <div className="max-w-6xl mx-auto p-4 space-y-6">
-        <h2 className="text-white text-2xl font-bold">
-          Reported Problems
-        </h2>
+      {items.map(p => (
+        <div key={p.id} className="border rounded-xl p-4 mb-4">
+          <h2 className="font-semibold">{p.title}</h2>
+          <p className="text-sm text-gray-600">{p.description}</p>
 
-        {loading && <p className="text-gray-400">Loading…</p>}
+          {p.imageUrl && (
+            <img
+              src={p.imageUrl}
+              className="mt-2 rounded-lg"
+            />
+          )}
 
-        {problems.map((p) => (
-          <div
-            key={p.id}
-            className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3"
-          >
-            <h3 className="text-white font-semibold">{p.title}</h3>
-            <p className="text-gray-400 text-sm">{p.description}</p>
-            <p className="text-gray-500 text-xs">📍 {p.area}</p>
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={async () => {
+                await approveProblem(p.id);
+                toast.success("Approved");
+                load();
+              }}
+              className="bg-green-600 text-white px-3 py-1 rounded"
+            >
+              Approve
+            </button>
 
-            {p.imageUrl && (
-              <img
-                src={p.imageUrl}
-                className="rounded-lg w-full max-h-60 object-cover"
-              />
-            )}
+            <button
+              onClick={async () => {
+                await rejectProblem(p.id);
+                toast("Rejected");
+                load();
+              }}
+              className="bg-yellow-500 text-white px-3 py-1 rounded"
+            >
+              Reject
+            </button>
 
-            {p.lat && p.lng && (
-              <a
-                href={`https://www.google.com/maps?q=${p.lat},${p.lng}`}
-                target="_blank"
-                className="text-indigo-400 text-sm"
-              >
-                Open Map →
-              </a>
-            )}
-
-            <div className="flex gap-2 flex-wrap">
-              <button
-                onClick={() =>
-                  action(approveProblem, p.id, "Approved")
-                }
-                className="bg-green-600 px-3 py-1 rounded text-white text-sm"
-              >
-                Approve
-              </button>
-
-              <button
-                onClick={() =>
-                  action(rejectProblem, p.id, "Rejected")
-                }
-                className="bg-yellow-600 px-3 py-1 rounded text-white text-sm"
-              >
-                Reject
-              </button>
-
-              <button
-                onClick={() =>
-                  action(deleteProblem, p.id, "Deleted")
-                }
-                className="bg-red-600 px-3 py-1 rounded text-white text-sm"
-              >
-                Delete
-              </button>
-            </div>
+            <button
+              onClick={async () => {
+                await deleteProblem(p.id);
+                toast.error("Deleted");
+                load();
+              }}
+              className="bg-red-600 text-white px-3 py-1 rounded"
+            >
+              Delete
+            </button>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

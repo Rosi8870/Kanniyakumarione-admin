@@ -1,25 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function AdminNavbar() {
-  const navigate = useNavigate();
-
-  const logout = () => {
-    localStorage.removeItem("admin");
-    navigate("/admin/login");
-  };
-
   return (
-    <div className="flex items-center justify-between p-4 bg-black border-b border-white/10">
-      <h1 className="text-white font-bold text-lg">
-        Kanniyakumari Admin
-      </h1>
-
-      <button
-        onClick={logout}
-        className="text-sm bg-red-600 px-3 py-1 rounded text-white"
-      >
-        Logout
-      </button>
-    </div>
+    <nav className="flex gap-3 overflow-x-auto py-3 px-4 bg-black border-b border-white/10 text-sm">
+      <Link to="/" className="text-white">Dashboard</Link>
+      <Link to="/problems" className="text-white">Problems</Link>
+      <Link to="/businesses" className="text-white">Businesses</Link>
+      <Link to="/tourist" className="text-white">Tourist</Link>
+      <Link to="/hospitals" className="text-white">Hospitals</Link>
+      <Link to="/schools" className="text-white">Schools</Link>
+    </nav>
   );
 }
