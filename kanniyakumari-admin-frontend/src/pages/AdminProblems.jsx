@@ -6,6 +6,7 @@ import {
   rejectProblem,
   deleteProblem,
 } from "../services/problems.admin.service";
+import { mapLink } from "../utils/map";
 
 export default function AdminProblems() {
   const [items, setItems] = useState([]);
@@ -38,6 +39,13 @@ export default function AdminProblems() {
     if (status === "approved") return "bg-emerald-500/10 text-emerald-400";
     if (status === "rejected") return "bg-rose-500/10 text-rose-400";
     return "bg-amber-500/10 text-amber-400";
+  };
+
+  const formatDate = (val) => {
+    if (!val) return "";
+    const seconds = val.seconds || val._seconds;
+    const date = seconds ? new Date(seconds * 1000) : new Date(val);
+    return isNaN(date.getTime()) ? "Invalid Date" : date.toLocaleDateString();
   };
 
   return (
@@ -136,9 +144,18 @@ export default function AdminProblems() {
                 {p.createdAt && (
                   <div>
                     Date:{" "}
-                    {new Date(
-                      p.createdAt.seconds * 1000
-                    ).toLocaleDateString()}
+                    {formatDate(p.createdAt)}
+                  </div>
+                )}
+                {p.lat && p.lng && (
+                  <div>
+                    <a
+                      href={mapLink(p.lat, p.lng)}
+                      target="_blank"
+                      className="text-blue-400 hover:text-blue-300"
+                    >
+                      View on Map
+                    </a>
                   </div>
                 )}
               </div>

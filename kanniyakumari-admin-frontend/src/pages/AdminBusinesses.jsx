@@ -64,9 +64,21 @@ export default function AdminBusinesses() {
             </h3>
 
             {/* Category */}
-            <p className="text-sm text-slate-400 mb-4">
+            <p className="text-sm text-blue-400 mb-2">
               {b.category}
             </p>
+
+            {/* Description */}
+            <p className="text-sm text-slate-400 mb-2 line-clamp-3">
+              {b.description}
+            </p>
+
+            {/* Contact */}
+            {(b.contact || b.phone) && (
+              <p className="text-sm text-slate-300 mb-4">
+                Contact: {b.contact || b.phone}
+              </p>
+            )}
 
             {/* Actions */}
             <div className="mt-auto space-y-2">
