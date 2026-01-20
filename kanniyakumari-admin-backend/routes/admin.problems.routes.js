@@ -4,9 +4,16 @@ import { db } from "../firebase/config.js";
 
 const router = express.Router();
 
-/* GET ALL PROBLEMS */
+/* GET ALL PROBLEMS WITH OPTIONAL STATUS FILTER */
 router.get("/", adminAuth, async (req, res) => {
-  const snap = await db.collection("problems").get();
+  const { status } = req.query;
+  let query = db.collection("problems");
+  
+  if (status) {
+    query = query.where("status", "==", status);
+  }
+  
+  const snap = await query.orderBy("createdAt", "desc").get();
   res.json(snap.docs.map(d => ({ id: d.id, ...d.data() })));
 });
 

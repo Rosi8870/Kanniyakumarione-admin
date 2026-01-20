@@ -1,7 +1,11 @@
 import { adminFetch } from "./adminApi";
 
-export const getAdminProblems = () =>
-  adminFetch("/api/admin/problems");
+export const getAdminProblems = (status = null) => {
+  const url = status 
+    ? `/api/admin/problems?status=${status}`
+    : `/api/admin/problems`;
+  return adminFetch(url);
+};
 
 export const approveProblem = (id) =>
   adminFetch(`/api/admin/problems/${id}/approve`, {
