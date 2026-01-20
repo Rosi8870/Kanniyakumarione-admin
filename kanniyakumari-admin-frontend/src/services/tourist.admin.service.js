@@ -10,6 +10,4 @@ export const addTouristPlace = (data) =>
   });
 
 export const deleteTouristPlace = (id) =>
-  adminFetch(`/api/admin/tourist/${id}`, {
-    method: "DELETE",
-  });
+  adminFetch(`/api/admin/tourist/${id}`, { method: "DELETE" });

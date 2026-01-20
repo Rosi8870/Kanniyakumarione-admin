@@ -1,14 +1,13 @@
 import { adminFetch } from "./adminApi";
 
-export const getBusinesses = () =>
-  adminFetch("/api/admin/businesses");
+export const getAdminProblems = () =>
+  adminFetch("/api/admin/problems");
 
-export const approveBusiness = (id) =>
-  adminFetch(`/api/admin/businesses/${id}/approve`, {
-    method: "PATCH",
-  });
+export const approveProblem = (id) =>
+  adminFetch(`/api/admin/problems/${id}/approve`, { method: "PATCH" });
 
-export const deleteBusiness = (id) =>
-  adminFetch(`/api/admin/businesses/${id}`, {
-    method: "DELETE",
-  });
+export const rejectProblem = (id) =>
+  adminFetch(`/api/admin/problems/${id}/reject`, { method: "PATCH" });
+
+export const deleteProblem = (id) =>
+  adminFetch(`/api/admin/problems/${id}`, { method: "DELETE" });

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import AdminNavbar from "../components/AdminNavbar";
 import {
   getBusinesses,
   approveBusiness,
@@ -8,11 +7,11 @@ import {
 } from "../services/business.admin.service";
 
 export default function AdminBusinesses() {
-  const [list, setList] = useState([]);
+  const [items, setItems] = useState([]);
 
   const load = async () => {
     try {
-      setList(await getBusinesses());
+      setItems(await getBusinesses());
     } catch {
       toast.error("Failed to load businesses");
     }
@@ -23,46 +22,41 @@ export default function AdminBusinesses() {
   }, []);
 
   return (
-    <>
-      <AdminNavbar />
-      <div className="p-4 space-y-4">
-        {list.map((b) => (
-          <div
-            key={b.id}
-            className="bg-white/5 border border-white/10 rounded-xl p-4"
-          >
-            <h3 className="text-white font-semibold">{b.name}</h3>
-            <p className="text-gray-400">{b.category}</p>
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold">Businesses</h1>
 
-            <div className="flex gap-3 mt-3">
-              {!b.verified && (
-                <button
-                  onClick={async () => {
-                    await approveBusiness(b.id);
-                    toast.success("Business approved");
-                    load();
-                  }}
-                  className="bg-green-600 px-3 py-1 rounded text-white"
-                >
-                  Approve
-                </button>
-              )}
+      {items.map((b) => (
+        <div key={b.id} className="bg-white/5 p-4 rounded-xl border border-white/10">
+          <h3 className="font-semibold">{b.name}</h3>
+          <p className="text-gray-400 text-sm">{b.category}</p>
 
+          <div className="flex gap-3 mt-3">
+            {!b.verified && (
               <button
                 onClick={async () => {
-                  if (!confirm("Delete business?")) return;
-                  await deleteBusiness(b.id);
-                  toast.success("Deleted");
+                  await approveBusiness(b.id);
+                  toast.success("Approved");
                   load();
                 }}
-                className="bg-red-600 px-3 py-1 rounded text-white"
+                className="bg-green-600 px-4 py-2 rounded"
               >
-                Delete
+                Approve
               </button>
-            </div>
+            )}
+
+            <button
+              onClick={async () => {
+                await deleteBusiness(b.id);
+                toast.success("Deleted");
+                load();
+              }}
+              className="bg-red-600 px-4 py-2 rounded"
+            >
+              Delete
+            </button>
           </div>
-        ))}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   );
 }

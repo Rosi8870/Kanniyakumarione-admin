@@ -5,17 +5,17 @@ import { db } from "../firebase/config.js";
 const router = express.Router();
 
 router.get("/", adminAuth, async (req, res) => {
-  const snap = await db.collection("schools").get();
+  const snap = await db.collection("tourist_places").get();
   res.json(snap.docs.map(d => ({ id: d.id, ...d.data() })));
 });
 
 router.post("/", adminAuth, async (req, res) => {
-  await db.collection("schools").add(req.body);
+  await db.collection("tourist_places").add(req.body);
   res.json({ success: true });
 });
 
 router.delete("/:id", adminAuth, async (req, res) => {
-  await db.collection("schools").doc(req.params.id).delete();
+  await db.collection("tourist_places").doc(req.params.id).delete();
   res.json({ success: true });
 });
 

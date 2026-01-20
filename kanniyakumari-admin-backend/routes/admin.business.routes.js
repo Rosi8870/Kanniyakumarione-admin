@@ -4,29 +4,22 @@ import { db } from "../firebase/config.js";
 
 const router = express.Router();
 
-/* GET ALL PROBLEMS */
+/* GET ALL */
 router.get("/", adminAuth, async (req, res) => {
-  const snap = await db.collection("problems").get();
+  const snap = await db.collection("businesses").get();
   res.json(snap.docs.map(d => ({ id: d.id, ...d.data() })));
 });
 
 /* APPROVE */
 router.patch("/:id/approve", adminAuth, async (req, res) => {
-  await db.collection("problems").doc(req.params.id)
-    .update({ status: "approved" });
-  res.json({ success: true });
-});
-
-/* REJECT */
-router.patch("/:id/reject", adminAuth, async (req, res) => {
-  await db.collection("problems").doc(req.params.id)
-    .update({ status: "rejected" });
+  await db.collection("businesses").doc(req.params.id)
+    .update({ verified: true });
   res.json({ success: true });
 });
 
 /* DELETE */
 router.delete("/:id", adminAuth, async (req, res) => {
-  await db.collection("problems").doc(req.params.id).delete();
+  await db.collection("businesses").doc(req.params.id).delete();
   res.json({ success: true });
 });
 

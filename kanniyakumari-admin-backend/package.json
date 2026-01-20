@@ -1,8 +1,9 @@
 {
-  "name": "kanyakumari-admin-backend",
+  "name": "kanniyakumari-admin-backend",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

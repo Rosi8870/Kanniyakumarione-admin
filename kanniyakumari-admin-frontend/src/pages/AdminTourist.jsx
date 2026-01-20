@@ -1,56 +1,77 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import AdminNavbar from "../components/AdminNavbar";
-import {
-  getTouristPlaces,
-  addTouristPlace,
-  deleteTouristPlace,
-} from "../services/tourist.admin.service";
+import { adminFetch } from "../services/adminApi";
+import { mapLink } from "../utils/map";
 
 export default function AdminTourist() {
-  const [places, setPlaces] = useState([]);
-  const [name, setName] = useState("");
+  const [items, setItems] = useState([]);
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    lat: "",
+    lng: "",
+  });
 
-  const load = async () => {
-    setPlaces(await getTouristPlaces());
-  };
+  const load = async () => setItems(await adminFetch("/api/admin/tourist"));
 
   useEffect(() => {
     load();
   }, []);
 
+  const submit = async () => {
+    await adminFetch("/api/admin/tourist", {
+      method: "POST",
+      body: JSON.stringify(form),
+    });
+    toast.success("Tourist place added");
+    setForm({ name: "", description: "", lat: "", lng: "" });
+    load();
+  };
+
   return (
-    <>
-      <AdminNavbar />
-      <div className="p-4 space-y-4">
-        <input
-          placeholder="Tourist place name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full p-3 rounded bg-black/40 text-white"
+    <div className="p-6 space-y-8">
+      <h1 className="text-2xl font-bold">Tourist Places</h1>
+
+      <div className="grid md:grid-cols-4 gap-3">
+        <input placeholder="Name" className="input"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
-
-        <button
-          onClick={async () => {
-            await addTouristPlace({ name });
-            toast.success("Added");
-            setName("");
-            load();
-          }}
-          className="bg-indigo-600 px-4 py-2 rounded text-white"
-        >
-          Add Place
+        <input placeholder="Description" className="input"
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+        />
+        <input placeholder="Latitude" className="input"
+          value={form.lat}
+          onChange={(e) => setForm({ ...form, lat: e.target.value })}
+        />
+        <input placeholder="Longitude" className="input"
+          value={form.lng}
+          onChange={(e) => setForm({ ...form, lng: e.target.value })}
+        />
+        <button onClick={submit} className="btn-primary col-span-full">
+          Add Tourist Place
         </button>
+      </div>
 
-        {places.map((p) => (
-          <div
-            key={p.id}
-            className="bg-white/5 border border-white/10 rounded p-3 flex justify-between"
-          >
-            <span className="text-white">{p.name}</span>
+      {items.map((t) => (
+        <div key={t.id} className="card">
+          <h3>{t.name}</h3>
+          <p className="text-sm text-gray-400">{t.description}</p>
+
+          <div className="flex gap-4 mt-2 text-sm">
+            <a
+              href={mapLink(t.lat, t.lng)}
+              target="_blank"
+              className="text-indigo-400"
+            >
+              View Map
+            </a>
             <button
               onClick={async () => {
-                await deleteTouristPlace(p.id);
+                await adminFetch(`/api/admin/tourist/${t.id}`, {
+                  method: "DELETE",
+                });
                 toast.success("Deleted");
                 load();
               }}
@@ -59,8 +80,8 @@ export default function AdminTourist() {
               Delete
             </button>
           </div>
-        ))}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   );
 }

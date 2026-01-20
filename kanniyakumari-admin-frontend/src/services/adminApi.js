@@ -5,15 +5,15 @@ export const adminFetch = async (url, options = {}) => {
   const res = await fetch(`${API}${url}`, {
     ...options,
     headers: {
-      "x-admin-key": KEY,
       "Content-Type": "application/json",
+      "x-admin-key": KEY,
       ...options.headers,
     },
   });
 
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Unauthorized");
+    const text = await res.text();
+    throw new Error(text || "Unauthorized");
   }
 
   return res.json();
