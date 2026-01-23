@@ -83,15 +83,17 @@ export default function AdminNavbar() {
       </nav>
 
       {/* ================= MOBILE APPLE DOCK ================= */}
-      <nav className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+      <nav className="md:hidden fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4">
         <div
           className="
             flex items-center gap-2 px-4 py-3
             rounded-3xl
-            bg-white/10
+            bg-slate-900/90
             backdrop-blur-xl
-            border border-white/20
-            shadow-[0_20px_40px_rgba(0,0,0,0.6)]
+            border border-slate-800
+            shadow-2xl
+            overflow-x-auto
+            max-w-full
           "
         >
           {navItems.map((item) => {
@@ -102,13 +104,14 @@ export default function AdminNavbar() {
                 to={item.path}
                 className={({ isActive }) =>
                   `
+                  flex-shrink-0
                   flex items-center justify-center
                   w-12 h-12 rounded-2xl
                   transition-all duration-300
                   ${
                     isActive
-                      ? `bg-white/20 scale-110 ${item.color}`
-                      : "text-slate-300 hover:bg-white/10"
+                      ? `bg-slate-800 scale-110 ${item.color}`
+                      : "text-slate-400 hover:bg-slate-800"
                   }
                   `
                 }
