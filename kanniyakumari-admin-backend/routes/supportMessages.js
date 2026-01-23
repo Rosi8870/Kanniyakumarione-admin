@@ -1,9 +1,10 @@
 import express from 'express';
 import { getFirestore } from 'firebase-admin/firestore';
+import adminAuth from '../middleware/adminAuth.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', adminAuth, async (req, res) => {
   try {
     const db = getFirestore();
     const messagesRef = db.collection('support_messages');
