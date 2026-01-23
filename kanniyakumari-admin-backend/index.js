@@ -26,7 +26,7 @@ app.use("/api/admin/businesses", adminBusinesses);
 app.use("/api/admin/hospitals", adminHospitals);
 app.use("/api/admin/schools", adminSchools);
 app.use("/api/admin/tourist", adminTourist);
-app.use("/api/support-messages", supportMessages);
+app.use("/api/admin/support-messages", supportMessages);
 
 
 const PORT = process.env.PORT || 5001;

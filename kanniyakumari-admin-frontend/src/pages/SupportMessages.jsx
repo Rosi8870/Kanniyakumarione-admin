@@ -9,8 +9,8 @@ export default function SupportMessages() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const apiBase = import.meta.env.VITE_ADMIN_API || "http://localhost:5001";
-        const res = await fetch(`${apiBase}/api/support-messages`, {
+        const apiBase = import.meta.env.VITE_ADMIN_API;
+        const res = await fetch(`${apiBase}/api/admin/support-messages`, {
           headers: {
             "x-admin-key": import.meta.env.VITE_ADMIN_SECRET,
           },
