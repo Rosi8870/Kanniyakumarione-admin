@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Mail, User, Clock } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { HiOutlineEnvelope, HiOutlineUser, HiOutlineClock } from "react-icons/hi2";
 
 export default function SupportMessages() {
   const [messages, setMessages] = useState([]);
@@ -9,20 +9,23 @@ export default function SupportMessages() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const apiBase = import.meta.env.VITE_ADMIN_API;
-        const res = await fetch(`${apiBase}/api/support_messages`, {
+        const apiBase = import.meta.env.VITE_ADMIN_API || "http://localhost:5001";
+        const res = await fetch(`${apiBase}/api/support-messages`, {
           headers: {
             "x-admin-key": import.meta.env.VITE_ADMIN_SECRET,
           },
         });
 
-        if (!res.ok) throw new Error("Failed to load");
+        if (!res.ok) {
+          if (res.status === 404) throw new Error("Endpoint not found (404). Check backend registration.");
+          throw new Error("Failed to load messages");
+        }
 
         const data = await res.json();
         setMessages(data);
       } catch (err) {
         console.error(err);
-        toast.error("Failed to load support messages");
+        toast.error(err.message);
       } finally {
         setLoading(false);
       }
@@ -32,87 +35,77 @@ export default function SupportMessages() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0b0f1a] p-4 sm:p-8">
+    <div className="min-h-screen bg-slate-950 text-white px-6 pt-24 pb-28">
 
       {/* HEADER */}
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white">
-          📨 Support Messages
+        <h1 className="text-3xl font-semibold">
+          Support Messages
         </h1>
-        <p className="text-gray-400 mt-1 text-sm">
-          Messages sent from users via Contact / Support page
+        <p className="text-slate-400 mt-1">
+          View inquiries from the contact form
         </p>
       </div>
 
       {/* LOADING */}
       {loading && (
-        <div className="text-center text-gray-400 mt-20">
+        <div className="text-center py-16 text-slate-400">
           Loading messages…
         </div>
       )}
 
       {/* EMPTY */}
       {!loading && messages.length === 0 && (
-        <div className="text-center text-gray-500 mt-20">
+        <div className="border border-slate-800 rounded-xl p-12 text-center text-slate-400">
           No support messages found.
         </div>
       )}
 
       {/* LIST */}
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:border-indigo-500/40 transition"
+            className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex flex-col hover:border-slate-700 transition"
           >
             {/* HEADER */}
-            <div className="flex justify-between items-start mb-3">
-              <div className="flex items-center gap-2 text-white font-semibold">
-                <User size={16} className="text-indigo-400" />
+            <div className="flex justify-between items-start mb-4">
+              <div className="flex items-center gap-2 font-medium text-slate-200">
+                <HiOutlineUser className="text-blue-400 text-lg" />
                 {msg.name || "Anonymous"}
               </div>
 
-              <div className="flex items-center gap-1 text-xs text-gray-400">
-                <Clock size={14} />
-                {msg.createdAt?._seconds
-                  ? new Date(
-                      msg.createdAt._seconds * 1000
-                    ).toLocaleDateString()
-                  : "N/A"}
+              <div className="flex flex-col items-end gap-1">
+                {msg.status && (
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    {msg.status}
+                  </span>
+                )}
+                <div className="flex items-center gap-1 text-xs text-slate-500">
+                  <HiOutlineClock />
+                  {msg.createdAt?._seconds
+                    ? new Date(
+                        msg.createdAt._seconds * 1000
+                      ).toLocaleDateString()
+                    : "N/A"}
+                </div>
               </div>
             </div>
 
             {/* EMAIL */}
-            <div className="flex items-center gap-2 text-sm text-indigo-400 mb-3">
-              <Mail size={16} />
+            <div className="flex items-center gap-2 text-sm text-blue-400 mb-4">
+              <HiOutlineEnvelope />
               <a
                 href={`mailto:${msg.email}`}
-                className="hover:underline break-all"
+                className="hover:underline hover:text-blue-300 transition"
               >
                 {msg.email}
               </a>
             </div>
 
             {/* MESSAGE */}
-            <div className="bg-black/30 border border-white/5 rounded-xl p-4 text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+            <div className="bg-slate-950/50 p-4 rounded-lg text-slate-300 text-sm whitespace-pre-wrap border border-slate-800/50">
               {msg.message}
-            </div>
-
-            {/* FOOTER (future-ready) */}
-            <div className="mt-4 flex justify-between items-center text-xs">
-              <span className="text-yellow-400">
-                ⏳ Pending
-              </span>
-
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(msg.message);
-                  toast.success("Message copied");
-                }}
-                className="text-indigo-400 hover:underline"
-              >
-                Copy
-              </button>
             </div>
           </div>
         ))}
