@@ -8,6 +8,7 @@ import AdminSchools from "./pages/AdminSchools";
 import AdminTourist from "./pages/AdminTourist";
 import SupportMessages from "./pages/SupportMessages";
 import AdminVolunteers from "./pages/AdminVolunteers";
+import AdminSponsors from "./pages/AdminSponsors";
 import AdminNavbar from "./components/AdminNavbar";
 
 const Protected = ({ children }) => {
@@ -37,6 +38,7 @@ export default function App() {
       <Route path="/tourist" element={<Protected><AdminNavbar /><AdminTourist /></Protected>} />
       <Route path="/support" element={<Protected><AdminNavbar /><SupportMessages /></Protected>} />
       <Route path="/volunteers" element={<Protected><AdminNavbar /><AdminVolunteers /></Protected>} />
+      <Route path="/sponsors" element={<Protected><AdminNavbar /><AdminSponsors /></Protected>} />
     </Routes>
   );
 }
