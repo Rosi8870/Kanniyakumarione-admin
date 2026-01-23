@@ -6,6 +6,7 @@ import {
   HiOutlineHeart,
   HiOutlineAcademicCap,
   HiOutlineCamera,
+  HiOutlineChatBubbleLeftRight,
 } from "react-icons/hi2"; // Heroicons v2
 
 import { HiOutlineLogout } from "react-icons/hi"; // Heroicons v1 (LOGOUT)
@@ -25,6 +26,7 @@ export default function AdminNavbar() {
     { path: "/hospitals", icon: HiOutlineHeart, color: "text-emerald-400" },
     { path: "/schools", icon: HiOutlineAcademicCap, color: "text-violet-400" },
     { path: "/tourist", icon: HiOutlineCamera, color: "text-cyan-400" },
+    { path: "/support", icon: HiOutlineChatBubbleLeftRight, color: "text-pink-400" },
   ];
 
   return (
