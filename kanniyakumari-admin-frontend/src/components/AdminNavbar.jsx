@@ -9,6 +9,7 @@ import {
   HiOutlineChatBubbleLeftRight,
   HiOutlineUserGroup,
   HiOutlineCurrencyDollar,
+  HiOutlineMegaphone,
 } from "react-icons/hi2"; // Heroicons v2
 
 import { HiOutlineLogout } from "react-icons/hi"; // Heroicons v1 (LOGOUT)
@@ -31,6 +32,7 @@ export default function AdminNavbar() {
     { path: "/support", icon: HiOutlineChatBubbleLeftRight, color: "text-pink-400" },
     { path: "/volunteers", icon: HiOutlineUserGroup, color: "text-orange-400" },
     { path: "/sponsors", icon: HiOutlineCurrencyDollar, color: "text-yellow-400" },
+    { path: "/updates", icon: HiOutlineMegaphone, color: "text-teal-400" },
   ];
 
   return (

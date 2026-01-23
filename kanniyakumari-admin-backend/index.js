@@ -10,6 +10,7 @@ import adminTourist from "./routes/admin.tourist.routes.js";
 import supportMessages from "./routes/supportMessages.js";
 import adminVolunteers from "./routes/admin.volunteers.routes.js";
 import adminSponsors from "./routes/admin.sponsors.routes.js";
+import adminUpdates from "./routes/admin.updates.routes.js";
 
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/admin/tourist", adminTourist);
 app.use("/api/admin/support-messages", supportMessages);
 app.use("/api/admin/volunteers", adminVolunteers);
 app.use("/api/admin/sponsors", adminSponsors);
+app.use("/api/admin/updates", adminUpdates);
 
 
 const PORT = process.env.PORT || 5001;

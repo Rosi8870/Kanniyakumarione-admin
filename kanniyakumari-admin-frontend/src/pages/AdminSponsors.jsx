@@ -11,7 +11,7 @@ import {
 export default function AdminSponsors() {
   const [sponsors, setSponsors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ name: "", imageUrl: "", website: "" });
+  const [form, setForm] = useState({ name: "", imageUrl: "", website: "", community: "" });
   const [editingId, setEditingId] = useState(null);
 
   const apiBase = import.meta.env.VITE_ADMIN_API || "http://localhost:5001";
@@ -57,7 +57,7 @@ export default function AdminSponsors() {
       if (!res.ok) throw new Error("Operation failed");
 
       toast.success(editingId ? "Sponsor updated" : "Sponsor added");
-      setForm({ name: "", imageUrl: "", website: "" });
+      setForm({ name: "", imageUrl: "", website: "", community: "" });
       setEditingId(null);
       fetchSponsors();
     } catch (error) {
@@ -69,7 +69,8 @@ export default function AdminSponsors() {
     setForm({
       name: sponsor.name,
       imageUrl: sponsor.imageUrl,
-      website: sponsor.website || ""
+      website: sponsor.website || "",
+      community: sponsor.community || ""
     });
     setEditingId(sponsor.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -119,12 +120,18 @@ export default function AdminSponsors() {
             value={form.website}
             onChange={(e) => setForm({ ...form, website: e.target.value })}
           />
+          <input
+            placeholder="Community (e.g. Gold, Silver)"
+            className="px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-800 focus:outline-none focus:border-slate-600"
+            value={form.community}
+            onChange={(e) => setForm({ ...form, community: e.target.value })}
+          />
           <div className="col-span-full flex gap-2">
             <button onClick={handleSubmit} className="px-6 py-2.5 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-500 transition">
               {editingId ? "Update Sponsor" : "Add Sponsor"}
             </button>
             {editingId && (
-              <button onClick={() => { setEditingId(null); setForm({ name: "", imageUrl: "", website: "" }); }} className="px-6 py-2.5 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700 transition">
+              <button onClick={() => { setEditingId(null); setForm({ name: "", imageUrl: "", website: "", community: "" }); }} className="px-6 py-2.5 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700 transition">
                 Cancel
               </button>
             )}
@@ -141,7 +148,12 @@ export default function AdminSponsors() {
             <div className="h-32 w-full bg-slate-950/50 rounded-lg mb-4 flex items-center justify-center overflow-hidden border border-slate-800/50">
               {sponsor.imageUrl ? <img src={sponsor.imageUrl} alt={sponsor.name} className="h-full w-full object-contain p-2" /> : <HiOutlinePhoto className="text-3xl text-slate-700" />}
             </div>
-            <h3 className="font-medium text-lg text-slate-200 mb-1">{sponsor.name}</h3>
+            <div className="flex justify-between items-start mb-1">
+              <h3 className="font-medium text-lg text-slate-200">{sponsor.name}</h3>
+              {sponsor.community && (
+                <span className="text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full">{sponsor.community}</span>
+              )}
+            </div>
             {sponsor.website && <a href={sponsor.website} target="_blank" rel="noreferrer" className="text-sm text-blue-400 hover:underline flex items-center gap-1 mb-4"><HiOutlineLink /> Visit Website</a>}
             
             <div className="mt-auto flex gap-2 pt-4 border-t border-slate-800/50">
